@@ -18,5 +18,12 @@ namespace Surface_Tension
         public float TimeBetweenDamage { get; set; } = 1f;
         [Description("Changes what the damage type is set as. True treats the value passed in st_damage as % of max health, False treats the the damage as normal HP.")]
         public bool IsDamagePercent { get; set; } = true;
+
+        [Description("Enable custom Cassie announcement on detonation.")]
+        public bool CassieAnnounce { get; set; } = true;
+        [Description("What do you want Cassie to announce on detonation?")]
+        public string CassieText { get; set; } = "The alpha warhead has been detonated . . Radiation has been detected . please evacuate immediately .";
+        [Description("Custom subtitles for the announcement.")]
+        public string CassieSubtitles { get; set; } = "The Alpha Warhead has been detonated. Radiation has been detected, please evacuate immediately.";
     }
 }

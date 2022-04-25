@@ -6,6 +6,8 @@ namespace Surface_Tension.API
 {
     public static class SurfaceTensionAPI
     {
+        public static bool IsDetonated = false;
+
         public static float DamageCalculation(Player player)
         {
             if (Plugin.Instance.Config.IsDamagePercent)

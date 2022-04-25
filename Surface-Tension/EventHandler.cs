@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs;
 using MEC;
 using Surface_Tension.API;
@@ -17,13 +18,34 @@ namespace Surface_Tension
 
         public void OnWarheadDetonation()
         {
-            if (!Plugin.Instance.Config.EnableDelay)
-                Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealDamage()));
+            if (SurfaceTensionAPI.IsDetonated)
+                return;
 
-            Timing.CallDelayed(Plugin.Instance.Config.DelayTime, () =>
+            SurfaceTensionAPI.IsDetonated = true;
+
+            if (Plugin.Instance.Config.EnableDelay)
+            {
+                Timing.CallDelayed(Plugin.Instance.Config.DelayTime, () =>
+                {
+                    Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealDamage()));
+                });
+            }
+            else
             {
                 Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealDamage()));
-            });
+            }
+
+            if (Plugin.Instance.Config.EnableDelay && Plugin.Instance.Config.CassieAnnounce)
+            {
+                Timing.CallDelayed(Plugin.Instance.Config.DelayTime, () =>
+                {
+                    Cassie.MessageTranslated(Plugin.Instance.Config.CassieText, Plugin.Instance.Config.CassieSubtitles);
+                });
+            }
+            else if (Plugin.Instance.Config.CassieAnnounce)
+            {
+                Cassie.MessageTranslated(Plugin.Instance.Config.CassieText, Plugin.Instance.Config.CassieSubtitles, true);
+            }
         }
     }
 }
