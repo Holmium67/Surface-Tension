@@ -1,11 +1,12 @@
 ﻿using Exiled.API.Features;
+using System;
+using Surface_Tension.Configs;
 using Server = Exiled.Events.Handlers.Server;
 using Warhead = Exiled.Events.Handlers.Warhead;
-using System;
 
 namespace Surface_Tension
 {
-    public class Plugin : Plugin<Config>
+    public class Plugin : Plugin<BaseConfig>
     {
         public static Plugin Instance;
         private EventHandler events;
