@@ -3,12 +3,15 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs;
 using MEC;
 using Surface_Tension.API;
+using Surface_Tension.Configs;
+using UnityEngine;
 
 namespace Surface_Tension
 {
     public class EventHandler
     {
         public List<CoroutineHandle> Coroutines = new List<CoroutineHandle>();
+        private BaseConfig Config = Plugin.Instance.Config;
 
         public void OnRoundStart()
         {
@@ -33,28 +36,18 @@ namespace Surface_Tension
 
             SurfaceTensionAPI.IsDetonated = true;
 
-            if (Plugin.Instance.Config.EnableDelay)
+            if (Config.Damage.DamageDelay == -1f)
             {
-                Timing.CallDelayed(Plugin.Instance.Config.DelayTime, () =>
-                {
-                    Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealDamage()));
-                });
+                Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealPlayerDamage()));
+                SurfaceTensionAPI.Announce();
             }
             else
             {
-                Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealDamage()));
-            }
-
-            if (Plugin.Instance.Config.EnableDelay && Plugin.Instance.Config.CassieAnnounce)
-            {
-                Timing.CallDelayed(Plugin.Instance.Config.DelayTime, () =>
+                Timing.CallDelayed(Mathf.Clamp(Config.Damage.DamageDelay, 0.5f, 300f), () =>
                 {
-                    Cassie.MessageTranslated(Plugin.Instance.Config.CassieText, Plugin.Instance.Config.CassieSubtitles);
+                    Coroutines.Add(Timing.RunCoroutine(SurfaceTensionAPI.DealPlayerDamage()));
+                    SurfaceTensionAPI.Announce();
                 });
-            }
-            else if (Plugin.Instance.Config.CassieAnnounce)
-            {
-                Cassie.MessageTranslated(Plugin.Instance.Config.CassieText, Plugin.Instance.Config.CassieSubtitles, true);
             }
         }
     }
