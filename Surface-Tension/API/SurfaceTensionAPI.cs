@@ -21,7 +21,7 @@ namespace Surface_Tension.API
             {
                 foreach (Player player in Player.List)
                 {
-                    if (!player.IsAlive)
+                    if (!player.IsAlive || player.IsGodModeEnabled)
                         continue;
 
                     if (player.Health > DamageCalculation(player))

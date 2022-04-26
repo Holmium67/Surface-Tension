@@ -10,9 +10,9 @@ namespace Surface_Tension
         public static Plugin Instance;
         private EventHandler events;
 
-        public override string Name => "SurfaceTenshion";
+        public override string Name => "SurfaceTension";
         public override string Author => "Holmium67, updated by Heisenberg3666";
-        public override Version Version => new Version(2, 1, 0, 0);
+        public override Version Version => new Version(2, 2, 0, 0);
         public override Version RequiredExiledVersion => new Version(5, 1, 3);
 
         public override void OnEnabled()
@@ -33,12 +33,14 @@ namespace Surface_Tension
 
         public void RegisterEvents()
         {
+            Server.RoundStarted += events.OnRoundStart;
             Server.EndingRound += events.OnRoundEnd;
             Warhead.Detonated += events.OnWarheadDetonation;
         }
 
         public void UnregisterEvents()
         {
+            Server.RoundStarted -= events.OnRoundStart;
             Server.EndingRound -= events.OnRoundEnd;
             Warhead.Detonated -= events.OnWarheadDetonation;
         }
